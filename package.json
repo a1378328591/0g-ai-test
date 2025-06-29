@@ -1,0 +1,27 @@
+{
+  "name": "0g-ai-test",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "npx ts-node index.ts",
+    "test": "echo \"没有指定任何测试脚本\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@0glabs/0g-serving-broker": "^0.2.11",
+    "cli-table3": "^0.6.5",
+    "dotenv": "^17.0.0",
+    "ethers": "^6.13.1",
+    "openai": "^5.8.2",
+    "prompt-sync": "^4.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.6",
+    "@types/readline-sync": "^1.4.8",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  }
+}
