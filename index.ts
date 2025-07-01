@@ -53,8 +53,8 @@ async function main() {
   console.log(`\n🧠 可用模型列表：\n`);
 
   const table = new Table({
-    head: ['编号', '模型名称', '地址', '验证方式', '更新时间', '输入价', '输出价'],
-    colWidths: [6, 34, 30, 12, 21, 10, 10],
+    head: ['编号', '模型名称', '地址', '验证方式', '更新时间', '输入价(精度18位)', '输出价', '地址'],
+    colWidths: [6, 34, 30, 12, 21, 20, 10, 45],
     wordWrap: true,
   });
 
@@ -66,8 +66,9 @@ async function main() {
       m.url,
       m.verifiability,
       updatedAt,
-      `${m.inputPrice.toString()} OG`,
-      `${m.outputPrice.toString()} OG`,
+      `${m.inputPrice.toString()} `,
+      `${m.outputPrice.toString()} `,
+      m.provider,
     ]);
   });
 
