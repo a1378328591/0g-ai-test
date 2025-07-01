@@ -7,6 +7,10 @@
 
 ---
 
+## 先贴个示例图
+![image](https://github.com/user-attachments/assets/13eb47df-f403-4bf5-9f34-4d908fe2a33b)
+
+
 ## 环境要求
 
 - 已安装 Node.js 和 npm  
