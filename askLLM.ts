@@ -5,6 +5,7 @@ import OpenAI from 'openai';
 import type { ChatCompletionCreateParamsNonStreaming } from 'openai/resources/chat/completions';
 // @ts-ignore
 import { getBroker } from '@0g-ai/broker';
+import { parseEther, formatEther } from "ethers";
 
 export const getWalletFromEnv = (): Wallet => {
   const provider = new JsonRpcProvider(process.env.RPC_URL!);
@@ -25,6 +26,12 @@ export const getBrokerBalance = async (signer: Wallet): Promise<string> => {
   const broker = await createZGComputeNetworkBroker(signer);
   try {
     const account = await broker.ledger.getLedger();
+    const [balance, locked] = account.ledgerInfo;
+    console.log(`
+      Balance: ${ethers.formatEther(balance)} OG
+      Locked: ${ethers.formatEther(locked)} OG
+      Available: ${ethers.formatEther(balance - locked)} OG
+    `);
     return ethers.formatEther(account.ledgerInfo?.[0] ?? 0);
   } catch (e: any) {
     const reason = e?.revert?.name || e?.error?.data || e?.shortMessage;
@@ -75,7 +82,7 @@ export const askLLM = async (
   await broker.inference.acknowledgeProviderSigner(providerAddress);
   const jsonString = JSON.stringify(messages);
   const paddedJsonString = jsonString.repeat(3); // 字符串变大 3 倍
-  const headers = await broker.inference.getRequestHeaders(providerAddress, paddedJsonString);
+  const headers = await broker.inference.getRequestHeaders(providerAddress, jsonString);
   //console.log('headers', headers)
   const openai = new OpenAI({
     baseURL: endpoint,
@@ -145,4 +152,40 @@ export const askLLM2 = async (
   };
 };
 
+
+//还转给provider子账户
+export const transferFund = async (
+  signer: Wallet,
+  providerAddress: string,
+  fundAmount: bigint | number | string
+) => {
+  try {
+    const broker = await createZGComputeNetworkBroker(signer);
+    const amount = parseEther(fundAmount.toString()); 
+    console.log('amount (wei):', amount); // bigint 数字，如 100000000000000000n
+    console.log('amount (0g):', formatEther(amount)); // '0.1'
+    await broker.ledger.transferFund(providerAddress, "inference", amount);
+    console.log(`Transfer of ${amount} to ${providerAddress} successful.`);
+  } catch (error) {
+    console.error(`Transfer to ${providerAddress} failed:`, error);
+    throw error; // 可根据需求选择是否抛出
+  }
+}
+
+//还转给provider子账户
+export const depositFund = async (
+  signer: Wallet,
+  fundAmount: number
+) => {
+  try {
+    const broker = await createZGComputeNetworkBroker(signer);
+    const amount = parseEther(fundAmount.toString()); 
+    console.log('amount (0g):', fundAmount); // '0.1'
+    await broker.ledger.depositFund(fundAmount);
+    console.log(`Transfer successful.`);
+  } catch (error) {
+    console.error(`Transfer failed:`, error);
+    throw error; // 可根据需求选择是否抛出
+  }
+}
 
