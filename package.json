@@ -11,7 +11,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@0glabs/0g-serving-broker": "^0.2.12",
+    "@0glabs/0g-serving-broker": "^0.2.13",
     "cli-table3": "^0.6.5",
     "dotenv": "^17.0.0",
     "ethers": "^6.13.1",
