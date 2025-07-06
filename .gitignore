@@ -1,5 +1,5 @@
 .env
 node_modules/
-source_file/
+fine-tuning/qa_model/
 logs/
 auto.ts
